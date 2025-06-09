@@ -19,7 +19,7 @@ select * from users;
 create table courses (
     course_id int auto_increment primary key,                  -- 과목 ID (기본키)
     course_name varchar(255) not null,                         -- 과목 이름
-    professor_id int not null,                                 -- 담당 교수의 사용자 ID
+    professor_id int,                                 -- 담당 교수의 사용자 ID
     semester varchar(20) not null,                             -- 학기
     foreign key (professor_id) references users(user_id)	   -- user 참조
 		on delete cascade  									   -- 교수 삭제 시 과목도 삭제
@@ -35,8 +35,7 @@ create table course_schedule (
     location varchar(100),                                     -- 강의실 위치
     foreign key (course_id) references courses(course_id)      -- 과목 참조
         on delete cascade
-);
-
+);0p----------------
 -- 수강 신청 테이블: 학생이 어떤 과목을 수강 중인지 저장
 create table enrollments (
     enrollment_id int auto_increment primary key,              -- 수강 신청 ID (기본키)

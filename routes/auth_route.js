@@ -13,4 +13,10 @@ router.post('/login', authController.login);
 // 로그아웃
 router.post('/logout', authController.logout);
 
+// 회원가입 페이지 보여주기
+router.get('/register/student', authController.registerStudent);
+router.get('/register/professor', authController.registerProfessor);
+router.get('/register/admin', authController.registerAdmin);
+
+
 module.exports = router;

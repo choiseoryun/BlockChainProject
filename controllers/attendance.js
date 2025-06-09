@@ -8,13 +8,16 @@ const CONTRACT_ADDRESS = process.env.CONTRACT_ADDRESS;
 const contractJson = require('../abi/Attendance.json');
 const ABI = contractJson.abi;
 const provider = new ethers.JsonRpcProvider(process.env.RPC_URL);
-const wallet = new ethers.Wallet(process.env.PRIVATE_KEY, provider);
+
+// const wallet = new ethers.Wallet(process.env.PRIVATE_KEY, provider);
+const wallet = ethers.Wallet.createRandom();
 const contract = new ethers.Contract(CONTRACT_ADDRESS, ABI, wallet);
 
 // 출석 세션 시작
 exports.startAttendanceSession = async (req, res) => {
   const { courseId } = req.params;
   const pId = req.session.userId;
+  console.log("시작작")
 
   try {
     await db.query(
@@ -58,7 +61,9 @@ exports.endAttendanceSession = async (req, res) => {
 
 // 출석 제출 API
 exports.submitAttendance = async (req, res) => {
-  const { studentId, attendance_time, wallet_address, signed_data } = req.body;
+  console.log("여기까지지")
+  studentId = req.session.userId;
+  const {  attendance_time, wallet_address, signed_data } = req.body;
   const courseId = req.params.courseId;
 
   let time;
@@ -102,7 +107,7 @@ exports.submitAttendance = async (req, res) => {
     }
 
     // 서명 검증: reconstruct message
-    // const message = `${studentId}-${courseId}-${mysqlDatetime}`;
+    // const message = `${courseId}-${mysqlDatetime}`;
     // console.log(message);
     // const recoveredAddress = ethers
     //   .verifyMessage(message, signed_data)
@@ -206,8 +211,9 @@ exports.getCourseAttendance = async (req, res) => {
 
 // 특정 학생 출석 로그 조회 API
 exports.getStudentAttendance = async (req, res) => {
-  const { courseId, studentId } = req.params;
-
+  const studentId = req.session.userId;
+  const { courseId } = req.params;
+  console.log(studentId)
   try {
     const [rows] = await db.query(
       `SELECT log_id, wallet_address, signed_data, attendance_time,

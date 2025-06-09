@@ -2,12 +2,17 @@ require('dotenv').config({ path: __dirname + '/settings/.env' });
 const express = require('express');
 const path = require('path');
 const session = require('express-session');
+const cors = require('cors');
 
 const app = express();
 const port = 3000;
 
 app.use(express.json());
 
+app.use(cors({
+  origin: 'http://localhost:3001',  // 프론트 주소 (포트까지 정확히)
+  credentials: true,                 // 쿠키, 인증 헤더 허용 시 필요
+}));
 // 세션 설정
 app.use(
   session({
@@ -24,10 +29,11 @@ app.use(
 
 const authRoutes = require('./routes/auth_route');
 const attendanceRoutes = require('./routes/attendance_route');
+const enrollmentRoutes = require('./routes/enrollment_route');
 
 app.use('/auth', authRoutes);
 app.use('/attendance', attendanceRoutes);
-
+app.use('/enrollment', enrollmentRoutes);
 app.listen(port, () => {
   console.log(`listening on ${port}`);
 });
