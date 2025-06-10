@@ -1,7 +1,7 @@
 // src/pages/DashboardAdmin.jsx 
-import React, { useState } from "react"; 
+import React, { useState } from "react";
 
-const DashboardAdmin = () => { 
+const DashboardAdmin = () => {
   const [courseForm, setCourseForm] = useState({
     courseName: '',
     semester: ''
@@ -16,7 +16,7 @@ const DashboardAdmin = () => {
 
   const handleCourseSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!courseForm.courseName || !courseForm.semester) {
       alert('수업명과 학기를 모두 입력해주세요.');
       return;
@@ -24,7 +24,7 @@ const DashboardAdmin = () => {
 
     try {
       console.log('📚 수업 생성 요청 시작:', courseForm);
-      
+
       const response = await fetch('/enrollment/course', {
         method: 'POST',
         headers: {
@@ -42,10 +42,10 @@ const DashboardAdmin = () => {
 
       if (data.success) {
         alert('수업이 성공적으로 생성되었습니다!');
-        
+
         // 새로 생성된 수업을 목록에 추가
         setCourses(prev => [...prev, data.course]);
-        
+
         // 폼 초기화
         setCourseForm({
           courseName: '',
@@ -64,7 +64,7 @@ const DashboardAdmin = () => {
     try {
       const response = await fetch('/enrollment/course');
       const data = await response.json();
-      
+
       if (data.success) {
         setCourses(data.courses);
       }
@@ -78,14 +78,14 @@ const DashboardAdmin = () => {
     loadCourses();
   }, []);
 
-  return ( 
-    <div className="p-8"> 
-      <h2 className="text-2xl font-bold mb-6">관리자 대시보드</h2> 
-      
+  return (
+    <div className="p-8 container">
+      <h2 className="text-2xl font-bold mb-6">관리자 대시보드</h2>
+
       {/* 수업 생성 폼 */}
       <div className="bg-white p-6 rounded-lg shadow-md mb-8">
         <h3 className="text-xl font-semibold mb-4">새 수업 생성</h3>
-        
+
         <form onSubmit={handleCourseSubmit} className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -101,7 +101,7 @@ const DashboardAdmin = () => {
               required
             />
           </div>
-          
+
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
               학기
@@ -120,7 +120,7 @@ const DashboardAdmin = () => {
               <option value="겨울학기">겨울학기</option>
             </select>
           </div>
-          
+
           <button
             type="submit"
             className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition duration-200"
@@ -134,36 +134,29 @@ const DashboardAdmin = () => {
       <div className="bg-white p-6 rounded-lg shadow-md">
         <div className="flex justify-between items-center mb-4">
           <h3 className="text-xl font-semibold">생성된 수업 목록</h3>
-        
+
         </div>
-        
-        {courses.length === 0 ? (
-          <p className="text-gray-500 text-center py-8">생성된 수업이 없습니다.</p>
-        ) : (
-          <div className="grid gap-4">
-            {courses.map((course, index) => (
-              <div key={index} className="border border-gray-200 rounded-md p-4 hover:bg-gray-50">
-                <div className="flex justify-between items-center">
-                  <div>
-                    <h4 className="font-semibold text-lg">{course.course_name}</h4>
-                    <p className="text-gray-600">{course.semester}</p>
-                    {course.createdAt && (
-                      <p className="text-sm text-gray-500">
-                        생성일: {new Date(course.createdAt).toLocaleDateString()}
-                      </p>
-                    )}
-                    <div className="flex space-x-2">
-                  </div>
-                  </div>
-                
+
+        {courses
+          .filter(course => course && course.course_name)  // 방어: course나 course_name이 없는 건 제외
+          .map((course, index) => (
+            <div key={index} className="border border-gray-200 rounded-md p-4 hover:bg-gray-50">
+              <div className="flex justify-between items-center">
+                <div>
+                  <h4 className="font-semibold text-lg">{course.course_name}</h4>
+                  <p className="text-gray-600">{course.semester}</p>
+                  {course.createdAt && (
+                    <p className="text-sm text-gray-500">
+                      생성일: {new Date(course.createdAt).toLocaleDateString()}
+                    </p>
+                  )}
                 </div>
               </div>
-            ))}
-          </div>
-        )}
+            </div>
+          ))}
       </div>
-    </div> 
-  ); 
-}; 
+    </div>
+  );
+};
 
 export default DashboardAdmin;

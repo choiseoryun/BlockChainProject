@@ -148,11 +148,6 @@ export default function LoginPage() {
   // 🚀 교수 회원가입 API 요청
   const handleProfessorSubmit = async (e) => {
     e.preventDefault();
-    
-    if (!/^0x[a-fA-F0-9]{40}$/.test(professorForm.wallet)) {
-      alert('올바른 지갑 주소 형식이 아닙니다.');
-      return;
-    }
 
     try {
       console.log('👨‍🏫 교수 회원가입 요청 시작:', professorForm);
@@ -167,7 +162,7 @@ export default function LoginPage() {
           password: professorForm.password,
           name: professorForm.name,
           subject: professorForm.subject,
-          walletAddress: professorForm.wallet,
+          walletAddress: '0x5E0abDb6BaD181E49E466sa5CD9bBf9352888F4c',
         }),
       });
 
@@ -183,7 +178,7 @@ export default function LoginPage() {
           professorId: '',
           subject: '',
           password: '',
-          wallet: '',
+          wallet: '0x5E0abDb6BaD181E49E466sa5CD9bBf9352888F4c',
         });
         // 로그인 탭으로 이동
         setActiveTab('login');
@@ -205,11 +200,6 @@ export default function LoginPage() {
       return;
     }
 
-    if (adminForm.wallet && !/^0x[a-fA-F0-9]{40}$/.test(adminForm.wallet)) {
-      alert('올바른 지갑 주소 형식이 아닙니다.');
-      return;
-    }
-
     try {
       console.log('👨‍💼 관리자 회원가입 요청 시작:', adminForm);
       
@@ -223,7 +213,7 @@ export default function LoginPage() {
           password: adminForm.password,
           name: adminForm.name,
           email: adminForm.email,
-          walletAddress: adminForm.wallet,
+          walletAddress: "0x5E0abDb6BaD181E49E466aa5CD9bBf9352888F4d",
         }),
       });
 
@@ -240,7 +230,7 @@ export default function LoginPage() {
           email: '',
           password: '',
           confirmPassword: '',
-          wallet: '',
+          wallet: '0x5E0abDb6BaD181E49E466aa5CD9bBf9352888F4c',
         });
         // 로그인 탭으로 이동
         setActiveTab('login');
@@ -300,12 +290,10 @@ export default function LoginPage() {
           <input type="text" name="name" value={professorForm.name} onChange={handleProfessorChange} required />
           <label>교수 ID</label>
           <input type="text" name="professorId" value={professorForm.professorId} onChange={handleProfessorChange} required />
-          <label>과목</label>
-          <input type="text" name="subject" value={professorForm.subject} onChange={handleProfessorChange} required />
-          <label>비밀번호</label>
+               <label>비밀번호</label>
           <input type="password" name="password" value={professorForm.password} onChange={handleProfessorChange} required />
-          <label>지갑 주소</label>
-          <input type="text" name="wallet" value={professorForm.wallet} onChange={handleProfessorChange} required />
+          <label>비밀번호 확인</label>
+          <input type="password" name="confirmPassword" value={professorForm.confirmPassword} onChange={handleProfessorChange} required />
           <button type="submit">교수 가입</button>
         </form>
       )}
@@ -324,8 +312,6 @@ export default function LoginPage() {
           <input type="password" name="password" value={adminForm.password} onChange={handleAdminChange} required />
           <label>비밀번호 확인</label>
           <input type="password" name="confirmPassword" value={adminForm.confirmPassword} onChange={handleAdminChange} required />
-          <label>지갑 주소 (선택사항)</label>
-          <input type="text" name="wallet" value={adminForm.wallet} onChange={handleAdminChange} placeholder="0x..." />
           <button type="submit">관리자 가입</button>
         </form>
       )}
